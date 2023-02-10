@@ -1,11 +1,15 @@
 // import Navbar from "@/components/Navbar";
-import {Outlet} from "react-router-dom"
+import Auth from "@/components/GlobalViews/Auth"
+import { Outlet } from "react-router-dom"
 
-function LayoutDefault(){
-  return <div>
-    {/* <Navbar/> */}
-    <Outlet/>
-  </div>
+function LayoutDefault() {
+  return (
+    <div>
+      <Auth />
+      {/* <Navbar/> */}
+      <Outlet />
+    </div>
+  )
 }
 
-export default LayoutDefault;
+export default LayoutDefault

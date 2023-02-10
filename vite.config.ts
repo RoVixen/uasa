@@ -13,6 +13,10 @@ export default defineConfig(({ command, mode }) => {
         "@": resolve(__dirname, "src"),
       },
     },
+    server: {
+      host: true,
+      // https:true,
+    },
     define: {
       __APP_ENV__: env.APP_ENV,
     },

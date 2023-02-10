@@ -1,8 +1,8 @@
 
 const ROUTES={
   landing:"/",
+  chat:"/chat",
   loading:"/loading",
-  someroute:"/someroute",
 }
 
 export default ROUTES;

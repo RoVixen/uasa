@@ -1,19 +1,69 @@
 import { BACKEND_URL } from "@/config"
+import Cookies from "js-cookie"
 
-function serviceSimplify(
-  method: RequestInit["method"] = "GET",
+interface serviceSimplifierOptions {
+  token?: string
+  body?: BodyInit | { [key: string]: any }
+  query?: {
+    [key: string | symbol]: any
+  }
+  headers?: {
+    [key: string | symbol]: string
+  }
+}
+
+type HTTPMethod =
+  | "CONNECT"
+  | "DELETE"
+  | "GET"
+  | "HEAD"
+  | "OPTIONS"
+  | "PATCH"
+  | "POST"
+  | "PUT"
+
+const defaultHeaders = {
+  // "Content-Type": "application/json",
+  // accept: "application/json",
+}
+
+async function serviceSimplifier(
+  method: HTTPMethod = "GET",
   path: string = "",
-  body?: RequestInit["body"]
+  { token, body, query, headers = defaultHeaders }: serviceSimplifierOptions
 ) {
-  const pathToUse = path
+  token = token || Cookies.get("token") || undefined
+
+  const toSpreadTokenData = token ? { Authorization: "Bearer " + token } : {}
+
+  let pathToUse = path
     .split("/")
     .filter(p => !!p)
     .join("/")
 
-  return fetch(BACKEND_URL + pathToUse, {
-    method,
-    body,
-  }).then(tojson=>tojson.json())
+  if (query) {
+    pathToUse += "?" + new URLSearchParams(query).toString()
+  }
+
+  try {
+    const response = await fetch(BACKEND_URL + pathToUse, {
+      method,
+      //@ts-ignore
+      headers: {
+        ...headers,
+        ...toSpreadTokenData,
+      },
+      body: typeof body == "string" ? body : JSON.stringify(body),
+    })
+
+    if (response.status < 200 || response.status > 299)
+      throw (await response?.json()) || response
+
+    const successReturn = await response.json()
+    return successReturn
+  } catch (error) {
+    throw error
+  }
 }
 
-export default serviceSimplify
+export default serviceSimplifier

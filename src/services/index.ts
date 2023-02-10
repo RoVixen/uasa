@@ -1,2 +1,2 @@
-export { default as serviceCatalog } from './serviceExample';
+export { default as serviceCatalog } from './Auth/serviceAuthRegister';
 export { default as serviceSimplifier } from './serviceSimplifier';
