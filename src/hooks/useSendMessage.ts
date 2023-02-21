@@ -7,7 +7,7 @@ import JSEncrypt from "jsencrypt"
 import useFriends from "./useFriends"
 import useMessages from "./useMessages"
 
-const PIECES_LENGTH = 20000
+const PIECES_LENGTH = 200000
 
 const utf8Encode = new TextEncoder()
 
