@@ -1,6 +1,6 @@
 import { useChatWS, useFriends, useMessages, useService } from "@/hooks"
 import { serviceGetAllFriends } from "@/services/Friends"
-import { ChatUsersEntry } from "./components"
+import { ChatUsersAddFriend, ChatUsersEntry } from "./components"
 import { useEffect, useMemo, useState, useCallback } from "react"
 
 interface TChatUsers {}
@@ -57,13 +57,16 @@ function ChatUsers({}: TChatUsers) {
 
   return (
     <>
-      {friends?.map(friend => (
-        <ChatUsersEntry
-          key={friend.id}
-          name={friend.user}
-          online={friend.online || false}
-        />
-      ))}
+      <div className="flex flex-col gap-2 flex-grow">
+        {friends?.map(friend => (
+          <ChatUsersEntry
+            key={friend.id}
+            name={friend.user}
+            online={friend.online || false}
+          />
+        ))}
+      </div>
+      <ChatUsersAddFriend />
     </>
   )
 }
