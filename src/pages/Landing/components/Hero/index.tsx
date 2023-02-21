@@ -13,7 +13,7 @@ function Hero({}: THero) {
 
   return (
     <header className="bg-slate-500 w-full h-screen flex flex-col justify-center items-center gap-8">
-      <h1 className="text-9xl">UASA</h1>
+      <h1 className="text-9xl">UASA 2.0</h1>
       <div className="flex gap-8 text-xl">
         {/* Si sesion */}
         {!token && (
