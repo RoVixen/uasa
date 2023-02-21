@@ -1,36 +1,67 @@
-import { useChatWS, useService } from "@/hooks"
+import { useChatWS, useFriends, useMessages, useService } from "@/hooks"
 import { serviceGetAllFriends } from "@/services/Friends"
 import { ChatUsersEntry } from "./components"
-import { useEffect } from "react"
+import { useEffect, useMemo, useState, useCallback } from "react"
 
 interface TChatUsers {}
 
+interface Friend {
+  active: boolean
+  id: number
+  lastname: string
+  password: string
+  publicKey: string
+  user: string
+}
+
 function ChatUsers({}: TChatUsers) {
-  const { call, response, loading } = useService(serviceGetAllFriends, [])
+  const {
+    call: callGetAllFriends,
+    response: responseGetAllFriends,
+    loading: loadingGetAllFriends,
+  } = useService(serviceGetAllFriends, [])
+
+  const { friends, patchOrAddFriends, setOnline, patchFriend, getFriend } =
+    useFriends()
+  const { setActiveChat } = useMessages()
+
+  function onResponseGetFriends(res: Friend[]) {
+    console.log("callGetAllFriends res", res)
+    patchOrAddFriends(
+      //@ts-ignore
+      res.map(f => ({
+        active: f.active,
+        id: f.id,
+        publicKey: getFriend(f.user)?.publicKey || f.publicKey,
+        user: f.user,
+      }))
+    )
+
+    //coloca al responder el primero en la lista de amigos como chat seleccionado
+    if (res.length > 0) setActiveChat(res[0].user)
+  }
 
   useEffect(() => {
-    call().then(res => console.log(res))
+    callGetAllFriends().then(onResponseGetFriends)
   }, [])
 
-  // useChatWS({
-  //   onMessageText(e) {
-  //     console.log(e);
+  useChatWS({
+    onMessageText(e) {
+      if (e === "null") {
+        callGetAllFriends().then(onResponseGetFriends)
+      }
+    },
+  })
 
-  //     if (e !== "null") return
-
-  //     call().then(res => console.log(res))
-  //   },
-  // })
-
-  if (loading) return <h3>Cargando...</h3>
+  if (loadingGetAllFriends) return <h3>Cargando...</h3>
 
   return (
     <>
-      {response?.map(friend => (
+      {friends?.map(friend => (
         <ChatUsersEntry
           key={friend.id}
           name={friend.user}
-          online={friend.active}
+          online={friend.online || false}
         />
       ))}
     </>

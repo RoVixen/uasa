@@ -5,13 +5,22 @@ import { BrowserRouter } from "react-router-dom"
 import { LazyElement } from "./components"
 import { ROUTES } from "./config"
 import "./index.css"
-import { ProviderChatWS, ProviderSession } from "./providers"
+import {
+  ProviderChatWS,
+  ProviderFriends,
+  ProviderMessages,
+  ProviderSession,
+} from "./providers"
 
 function AllProviders({ children }: PropsWithChildren) {
   return (
     <>
       <ProviderSession>
-        <ProviderChatWS>{children}</ProviderChatWS>
+        <ProviderChatWS>
+          <ProviderFriends>
+            <ProviderMessages>{children}</ProviderMessages>
+          </ProviderFriends>
+        </ProviderChatWS>
       </ProviderSession>
     </>
   )

@@ -10,7 +10,11 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.1",
+    "@types/aes-js": "^3.1.1",
+    "@types/crypto-js": "^4.1.1",
     "@types/js-cookie": "^3.0.2",
+    "aes-js": "^3.1.2",
+    "crypto-js": "^4.1.1",
     "js-cookie": "^3.0.1",
     "jsencrypt": "^3.3.1",
     "jwt-decode": "^3.1.2",

@@ -13,6 +13,7 @@ interface useChatWSOptions {
   onClose?: (event: useChatWSEvent) => any
   onMessage?: (event: useChatWSEvent) => any
   onMessageText?: (event: string) => any
+  onMessageJson?: (event: any) => any
   onError?: (event: useChatWSEvent) => any
 }
 
@@ -30,10 +31,26 @@ function useChatWS(options: useChatWSOptions = {}) {
         chatWSEvent.dataObject = JSON.parse(chatWSEvent.data)
 
       if (type == "open" && options.onOpen) options.onOpen(chatWSEvent)
-      if (type == "close" && options.onClose) options.onClose(chatWSEvent)
+      if (type == "close" && options.onClose) {
+        console.log("useChatWS closed")
+
+        options.onClose(chatWSEvent)
+      }
       if (type == "message" && options.onMessage) options.onMessage(chatWSEvent)
-      if (type == "messageText" && options.onMessageText)
-        options.onMessageText(chatWSEvent.custom)
+      if (
+        type == "messageText" &&
+        (options.onMessageText || options.onMessageJson)
+      ) {
+        if (options.onMessageText) options.onMessageText(chatWSEvent.custom)
+
+        try {
+          if (options.onMessageJson)
+            options.onMessageJson(JSON.parse(chatWSEvent.custom))
+        } catch (error) {
+          console.error("useChatWS: Error parsing json message")
+          console.error(error)
+        }
+      }
       if (type == "error" && options.onError) options.onError(chatWSEvent)
     }
   )

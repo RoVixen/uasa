@@ -8,5 +8,4 @@ function makeid(length: number) {
   }
   return result
 }
-
 export default makeid

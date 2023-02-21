@@ -35,8 +35,22 @@ function useSession() {
 
   const createPublicPrivateKey = useCallback(() => {
     const crypt = new JSEncrypt({ default_key_size: "2048" })
-    const privateKey = crypt.getPrivateKey()
-    const publicKey = crypt.getPublicKey()
+
+    let privateKey: string | null = sessionStorage.getItem("privateKey")
+    if (privateKey) crypt.setPrivateKey(privateKey)
+    else {
+      privateKey = crypt.getPrivateKey()
+      sessionStorage.setItem("privateKey", privateKey)
+    }
+
+    let publicKey: string | null = sessionStorage.getItem("publicKey")
+    if (publicKey) crypt.setPrivateKey(publicKey)
+    else {
+      publicKey = crypt.getPublicKey()
+      sessionStorage.setItem("publicKey", publicKey)
+    }
+
+    sessionStorage.setItem("publicKey", publicKey)
 
     dispatch({
       type: "patch",

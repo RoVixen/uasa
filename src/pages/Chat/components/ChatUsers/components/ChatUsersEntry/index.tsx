@@ -1,11 +1,20 @@
+import { useFriends, useMessages } from "@/hooks"
+
 interface TChatUsersEntry {
   name: string
   online: boolean
 }
 
 function ChatUsersEntry({ name, online }: TChatUsersEntry) {
+  // const { setOnline, friends } = useFriends()
+  const { setActiveChat } = useMessages()
+
   return (
-    <div className="rounded bg-white py-2 px-4 flex justify-between items-center">
+    <div
+      // onClick={() => setOnline(name, !friends.find(f=>f.user==name)?.active)}
+      onClick={() => setActiveChat(name)}
+      className="rounded bg-white py-2 px-4 flex justify-between items-center cursor-pointer"
+    >
       <span>{name}</span>{" "}
       <div
         className={

@@ -30,10 +30,10 @@ function ProviderChatWS({ children }: PropsWithChildren) {
     {
       onOpen: event => {
         //implementando pong para no morir el ws
-        event.target.pongTimerId = setInterval(
-          () => event.target?.send(JSON.stringify({ type: "pong" })),
-          500
-        )
+        // event.target.pongTimerId = setInterval(
+        //   () => event.target?.send(JSON.stringify({ type: "pong" })),
+        //   2000
+        // )
 
         //generando y guardando public key
         const { publicKey } = createPublicPrivateKey()
@@ -48,7 +48,7 @@ function ProviderChatWS({ children }: PropsWithChildren) {
         dispatchWSNotificationEvent(event, "open")
       },
       onClose: event => {
-        clearInterval(event.target.pongTimerId)
+        // clearInterval(event.target.pongTimerId)
         dispatchWSNotificationEvent(event, "close")
       },
       onMessage: event => {
@@ -56,7 +56,7 @@ function ProviderChatWS({ children }: PropsWithChildren) {
         const reader = new FileReader()
 
         reader.addEventListener("load", e => {
-          console.log(e.target?.result)
+          // console.log(e.target?.result)
 
           dispatchWSNotificationEvent(
             { custom: e.target?.result },
